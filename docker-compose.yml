@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+    web:
+        restart: 'on-failure'
+        build:
+            context: '.'
+            dockerfile: Dockerfile.dev
+            # args:
+            #     uid: ${UID}
+        container_name: tokencredit
+        environment:
+            - DEBUG=True
+
+        volumes:
+            - /var/www/html/node_modules
+            - /var/www/html/.git
+            - /var/www/html/.vscode
+            - /var/www/html/source-files
+            - ./:/var/www/html:delegated
+
+        ports:
+            - 80:80
+            - 443:443

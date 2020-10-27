@@ -1,0 +1,63 @@
+name: tokencredit
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - ca-certificates=2020.10.14=0
+  - certifi=2020.6.20=py37_0
+  - django=3.1.2=py_0
+  - flake8=3.8.4=py_0
+  - importlib-metadata=2.0.0=py_1
+  - krb5=1.17.1=hddcf347_0
+  - libcxx=10.0.0=1
+  - libedit=3.1.20191231=h1de35cc_1
+  - libffi=3.3=hb1e8313_2
+  - libpq=12.2=h051b688_0
+  - mccabe=0.6.1=py37_1
+  - ncurses=6.2=h0a44026_1
+  - openssl=1.1.1h=haf1e3a3_0
+  - pip=20.2.4=py37_0
+  - psycopg2=2.8.5=py37hddc9c9b_0
+  - pycodestyle=2.6.0=py_0
+  - pyflakes=2.2.0=py_0
+  - python=3.7.9=h26836e1_0
+  - pytz=2020.1=py_0
+  - readline=8.0=h1de35cc_0
+  - setuptools=50.3.0=py37h0dc7051_1
+  - sqlite=3.33.0=hffcf06c_0
+  - sqlparse=0.4.1=py_0
+  - tk=8.6.10=hb0a8c7a_0
+  - wheel=0.35.1=py_0
+  - xz=5.2.5=h1de35cc_0
+  - zipp=3.3.1=py_0
+  - zlib=1.2.11=h1de35cc_3
+  - pip:
+    - asgiref==3.2.10
+    - boto3==1.16.4
+    - botocore==1.19.4
+    - chardet==3.0.4
+    - configparser==5.0.1
+    - django-amazon-ses==4.0.0
+    - django-environ==0.4.5
+    - django-minio-storage==0.3.8
+    - django-redis==4.12.1
+    - django-stdimage==5.1.1
+    - django-storages==1.10.1
+    - django-tinymce==3.0.2
+    - djangorestframework==3.12.1
+    - gunicorn==20.0.4
+    - idna==2.10
+    - jmespath==0.10.0
+    - minio==6.0.0
+    - mysqlclient==2.0.1
+    - pillow==8.0.1
+    - progressbar2==3.53.1
+    - python-dateutil==2.8.1
+    - python-utils==2.4.0
+    - redis==3.5.3
+    - requests==2.24.0
+    - s3transfer==0.3.3
+    - six==1.15.0
+    - urllib3==1.25.11
+prefix: /Users/mac/opt/anaconda3/envs/tokencredit
+

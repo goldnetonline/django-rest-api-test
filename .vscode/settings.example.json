@@ -1,0 +1,10 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": ["--max-line-length=180"],
+    "python.pythonPath": "~/opt/anaconda3/envs/tokencredit/bin/python",
+    "python.linting.pylintEnabled": false,
+    "psi-header.changes-tracking": {
+        "enforceHeader": false
+    }
+}

@@ -1,0 +1,25 @@
+FROM python:3.7
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    default-mysql-client \
+    git \
+    zip \
+    curl \
+    sudo \
+    nano \
+    cron \
+    nginx \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /var/www/html/
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+
+
+COPY . .
+
+EXPOSE 80
+EXPOSE 443
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
