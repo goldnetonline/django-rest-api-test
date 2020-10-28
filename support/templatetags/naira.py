@@ -1,10 +1,10 @@
 '''
-File: naira.py
-Project: edutours.com.ng
+File: user.py
+Project: token-credit-backend
 File Created: Tuesday, 7th July 2020 5:03:12 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Tuesday, 7th July 2020 5:07:21 pm
+Last Modified: Wednesday, 28th October 2020 1:01:01 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd

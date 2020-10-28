@@ -56,15 +56,18 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+
+    'core.apps.CoreConfig',
     'support.apps.SupportConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'django.contrib.humanize',
+
     'rest_framework',
     'storages',
 ]
@@ -158,6 +161,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'core.User'
 
 
 # Internationalization

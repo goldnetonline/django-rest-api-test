@@ -15,3 +15,4 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 -   Created the database_models module which is a python manage.py inspectdb from the swift loan manager
 -   Setup project for docker
 -   Initialize project repo
+-   Added User model and first migration

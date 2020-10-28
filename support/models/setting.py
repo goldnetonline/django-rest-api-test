@@ -1,10 +1,10 @@
 '''
-File: setting.py
-Project: edutours.com.ng
+File: user.py
+Project: token-credit-backend
 File Created: Wednesday, 26th February 2020 6:51:39 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Wednesday, 8th July 2020 5:54:47 am
+Last Modified: Wednesday, 28th October 2020 1:01:01 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
