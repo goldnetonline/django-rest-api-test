@@ -3,7 +3,7 @@
 import django.contrib.auth.validators
 from django.db import migrations, models
 import django.utils.timezone
-from support.storages import defaultBackend
+from support.storages import default_backend
 
 
 class Migration(migrations.Migration):
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ('state', models.CharField(blank=True, max_length=191, null=True)),
                 ('country', models.CharField(blank=True, max_length=191, null=True)),
                 ('avatar', models.ImageField(blank=True, null=True,
-                                             storage=defaultBackend, upload_to='avatars')),
+                                             storage=default_backend, upload_to='avatars')),
                 ('must_change_password', models.BooleanField(
                     blank=True, default=False, null=True)),
                 ('is_blocked', models.BooleanField(

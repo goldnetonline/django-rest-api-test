@@ -19,7 +19,8 @@
         "log": "docker logs tokencredit",
         "live-log": "docker logs -f tokencredit",
         "sr": "ssh -o ServerAliveInterval=60 -R dev-proxy.tokencredit.com.ng:80:localhost:80 serveo.net",
-        "shell": "DJANGO_SETTINGS_MODULE=tokencredit.settings python manage.py shell"
+        "shell": "DJANGO_SETTINGS_MODULE=tokencredit.settings python manage.py shell",
+        "system_check": "docker exec -it tokencredit bash -c \"DJANGO_SETTINGS_MODULE=tokencredit.settings python manage.py check\""
     },
     "devDependencies": {
         "concurrently": "^5.1.0",

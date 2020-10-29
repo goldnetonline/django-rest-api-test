@@ -1,18 +1,19 @@
 '''
-File: user.py
+File: private_backend.py
 Project: token-credit-backend
 File Created: Thursday, 20th February 2020 3:09:51 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Wednesday, 28th October 2020 1:01:02 pm
+Last Modified: Thursday, 29th October 2020 12:18:39 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
 '''
 
-from ..helper import config, getClassFromDotString
+from ..helper import config, get_class_from_dot_string
+from ..logging import logger
 
-defaultStorage = config('DEFAULT_FILE_STORAGE')
+default_storage = config('DEFAULT_FILE_STORAGE')
 
 
 class DefautStorageBackend:
@@ -20,10 +21,10 @@ class DefautStorageBackend:
     instance = None
 
     def __init__(self):
-        if not defaultStorage:
+        if not default_storage:
             raise Exception('Default storage backend not configured')
 
-        self.default_backend = getClassFromDotString(defaultStorage)()
+        self.default_backend = get_class_from_dot_string(default_storage)()
 
     @property
     def backend(self):
@@ -36,8 +37,12 @@ class DefautStorageBackend:
         return DefautStorageBackend.instance
 
 
-defaultBackend = DefautStorageBackend.getInstance()
+try:
+    default_backend = DefautStorageBackend.getInstance()
+except Exception as e:
+    logger.exception(e)
+    default_backend = None
 
 __all__ = [
-    'defaultBackend'
+    'default_backend'
 ]

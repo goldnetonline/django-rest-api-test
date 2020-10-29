@@ -1,5 +1,6 @@
 from . import S3Private, MinioPrivate
 from ..helper import config
+from ..logging import logger
 
 env = config('APP_ENV')
 
@@ -21,7 +22,11 @@ class PrivateBackend:
         return PrivateBackend.instance
 
 
-privateBackend = PrivateBackend.getInstance()
+try:
+    privateBackend = PrivateBackend.getInstance()
+except Exception as e:
+    logger.exception(e)
+    privateBackend = None
 
 __all__ = [
     'privateBackend',

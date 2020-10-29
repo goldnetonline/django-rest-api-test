@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Tuesday, 4th February 2020 3:16:04 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Sunday, 25th October 2020 6:40:28 pm
+Last Modified: Thursday, 29th October 2020 10:54:18 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -115,7 +115,7 @@ def randomStringDigits(length=6) -> str:
     return ''.join(random.choice(lettersAndDigits) for i in range(length))
 
 
-def getClassFromDotString(string: str):
+def get_class_from_dot_string(string: str):
     """
     Get a class from dot string notation
     like support.helper.someclass will return someclass with proper mro

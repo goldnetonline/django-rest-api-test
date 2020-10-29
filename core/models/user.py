@@ -1,10 +1,10 @@
 '''
-File: user.py
+File: default_backend.py
 Project: token-credit-backend
 File Created: Wednesday, 29th January 2020 10:05:45 am
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Wednesday, 28th October 2020 3:03:03 pm
+Last Modified: Thursday, 29th October 2020 10:56:17 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -15,7 +15,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from support.models.mixims import TouchDatesMixim
-from support.storages import defaultBackend
+from support.storages import default_backend
+from stdimage import StdImageField
 
 
 # from .model import Application
@@ -112,8 +113,16 @@ class User(AbstractUser, TouchDatesMixim):
     state = models.CharField(max_length=191, null=True, blank=True)
     country = models.CharField(max_length=191, null=True, blank=True)
 
-    avatar = models.ImageField(
-        storage=defaultBackend, upload_to='avatars', null=True, blank=True)
+    avatar = StdImageField(
+        storage=default_backend, upload_to='avatars',
+        verbose_name="Profile Picture",
+        variations={
+            # 'main': (400, 500),
+            'large': (1024, 1024, True),
+            'medium': (500, 500, True),
+            'thumb': (200, 200, True),
+        }, delete_orphans=True,
+        null=True, blank=True)
 
     must_change_password = models.BooleanField(
         blank=True, null=True, default=False)

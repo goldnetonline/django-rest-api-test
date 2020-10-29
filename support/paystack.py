@@ -1,16 +1,16 @@
 '''
-File: paystack.py
+File: private_backend.py
 Project: token-credit-backend
 File Created: Thursday, 25th June 2020 4:41:10 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Tuesday, 27th October 2020 11:42:05 am
+Last Modified: Thursday, 29th October 2020 12:18:39 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
 '''
 import hmac
-from .log import logger
+from .logging import logger
 from .helper import randomStringDigits, config
 from .http import request as http_request
 from .exceptions import NoOrInvalidPaystackKey, Forbidden

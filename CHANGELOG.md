@@ -16,3 +16,4 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 -   Setup project for docker
 -   Initialize project repo
 -   Added User model and first migration
+-   Finetuned Django Logging

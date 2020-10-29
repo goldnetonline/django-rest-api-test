@@ -42,6 +42,7 @@ APP_ENV = env('APP_ENV', default='production')
 
 # Application name
 APP_NAME = env('APP_NAME', default='Token Credit')
+APP_IDENTIFIER = APP_NAME.lower().replace(" ", "_")
 
 SITE_URL = env('SITE_URL', default="https://tokencredit.com/")
 
@@ -91,7 +92,7 @@ ROOT_URLCONF = 'tokencredit.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -99,6 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'tokencredit.root_context.root_context'
             ],
         },
     },
@@ -126,23 +128,27 @@ DATABASES = {
 }
 
 # CACHE
-if env('CACHE_DRIVER', default=None) == 'django_redis.cache.RedisCache':
+if env('CACHE_DRIVER', default=None) == 'redis':
     CACHES = {
         "default": {
-            "BACKEND": env('CACHE_DRIVER'),
+            "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": env('REDIS_HOST'),
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 # "PASSWORD": env('REDIS_PASSWORD', None)
             },
-            "KEY_PREFIX": APP_NAME
+            "KEY_PREFIX": APP_IDENTIFIER
         }
     }
 
 # Session
-SESSION_ENGINE = env(
-    'SESSION_DRIVER', default='django.contrib.sessions.backends.db')
+session_driver = env(
+    'SESSION_DRIVER',
+    default='django.contrib.sessions.backends.db'
+)
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cache" if session_driver == "cache" else session_driver
+SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -205,7 +211,9 @@ if APP_ENV == 'local':
         'AWS_URL') + "/" + MINIO_STORAGE_LOCATION + '/'
     MINIO_STORAGE_MEDIA_URL = env(
         'AWS_URL') + "/"
-    MINIO_STORAGE_USE_HTTPS = False
+
+    MINIO_STORAGE_USE_HTTPS = True
+
     # STATICFILES_STORAGE = 'minio_storage.storage.MinioStaticStorage'
     DEFAULT_FILE_STORAGE = 'minio_storage.storage.MinioMediaStorage'
     STATIC_URL = '/public/'
@@ -265,28 +273,76 @@ CSRF_HEADER_NAME = "HTTP_X_CSRF_TOKEN"
 LOGIN_URL = '/auth/'
 
 
+info_handler = {
+    'handlers': ['file'],
+    'level': 'INFO',
+    'propagate': True,
+}
+
+
+error_handler = {
+    'handlers': ['file_error'],
+    'level': 'ERROR',
+    'propagate': True,
+}
+
+
+debug_handler = {
+    'handlers': ['file_debug'],
+    'level': 'INFO',
+    'propagate': True,
+}
+
+
+def get_file_logger(level: str, filename: str = None) -> dict:
+    return {
+        'level': level,
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename':  os.path.join(BASE_DIR, 'storage/logs/', (filename if filename else level.lower()) + '.log'),
+    }
+
+
 # Logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "{levelname} {asctime} {process:d} {message}",
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'filters': {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename':  os.path.join(BASE_DIR, 'storage/logs/application.log'),
-        },
+        'file': get_file_logger('INFO', 'application'),
+        'file_error': get_file_logger('ERROR'),
+        'file_debug': get_file_logger('DEBUG'),
+
+        # You can look at this to setup slack logs
+        # useful in the future
+        # Also look at how to write handlers and filters
+        # 'mail_admins': {
+        #     'level': 'ERROR',
+        #     'class': 'django.utils.log.AdminEmailHandler',
+        #     'filters': ['special']
+        # }
     },
+
     'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
+        'django': info_handler,
+        APP_IDENTIFIER: info_handler,
+        f"{APP_IDENTIFIER}.error": error_handler,
+        f"{APP_IDENTIFIER}.exception": error_handler,
+        f"{APP_IDENTIFIER}.debug": debug_handler,
     },
 }
 
