@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Tuesday, 4th February 2020 3:16:04 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Thursday, 29th October 2020 10:54:18 am
+Last Modified: Thursday, 29th October 2020 5:51:49 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -30,8 +30,9 @@ def config(key: str, default=None) -> Optional[str]:
     '''
     Read config from settings and return their value
     '''
-    value = getattr(settings, key, None)
-    return value if value is not None else default
+    return getattr(settings, key, default)
+    # value = getattr(settings, key, None)
+    # return value if value is not None else default
 
 
 def serialize(comp_obj: object, extract_key: bool = False):

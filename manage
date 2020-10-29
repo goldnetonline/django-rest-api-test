@@ -1,0 +1,4 @@
+args="$@"
+command="python manage.py $args"
+echo "$command"
+docker exec -it tokencredit bash -c "/bin/bash -c \"$command\""

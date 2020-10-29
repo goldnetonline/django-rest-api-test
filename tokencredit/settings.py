@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 
     'core.apps.CoreConfig',
     'support.apps.SupportConfig',
+    'api.apps.ApiConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -355,3 +356,8 @@ PAYSTACK_WEBHOOK_IPS = [
     '52.214.14.220',
 ]
 PAYSTACK_API_ENDPOINT = 'https://api.paystack.co'
+
+
+# For django rest framework
+
+USE_DJANGO_REST_FRAMEWORK = True
