@@ -11,8 +11,12 @@ RUN apt-get update \
     cron \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip install --upgrade pip
+
 WORKDIR /var/www/html/
+
 COPY requirements.txt ./
+
 RUN pip install -r requirements.txt
 
 # This should come before the requirement install
