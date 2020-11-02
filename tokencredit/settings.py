@@ -58,9 +58,10 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
 
-    'core.apps.CoreConfig',
-    'support.apps.SupportConfig',
-    'api.apps.ApiConfig',
+    'core',
+    'support',
+    'api',
+    'loan',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -168,6 +169,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+]
+
 
 AUTH_USER_MODEL = 'core.User'
 
@@ -300,7 +310,7 @@ def get_file_logger(level: str, filename: str = None) -> dict:
         'level': level,
         'class': 'logging.FileHandler',
         'formatter': 'verbose',
-        'filename':  os.path.join(BASE_DIR, 'storage/logs/', (filename if filename else level.lower()) + '.log'),
+        'filename': os.path.join(BASE_DIR, 'storage/logs/', (filename if filename else level.lower()) + '.log'),
     }
 
 

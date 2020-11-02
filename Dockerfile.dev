@@ -26,11 +26,11 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN useradd appuser && chown -R appuser /var/www/html
-USER appuser
+# RUN useradd appuser && chown -R appuser /var/www/html
+# USER appuser
 
 
-EXPOSE 2000
+EXPOSE 80
 # EXPOSE 443
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:2000"]
+#
+CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]

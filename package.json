@@ -17,6 +17,7 @@
         "stop": "docker-compose stop",
         "restart": "yarn stop && yarn start",
         "log": "docker logs tokencredit",
+        "test": "docker exec -it tokencredit bash -c \"python -Wa manage.py test --parallel -v 2\"",
         "live-log": "docker logs -f tokencredit",
         "sr": "ssh -o ServerAliveInterval=60 -R dev-proxy.tokencredit.com.ng:80:localhost:80 serveo.net",
         "shell": "DJANGO_SETTINGS_MODULE=tokencredit.settings python manage.py shell",

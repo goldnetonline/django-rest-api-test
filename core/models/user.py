@@ -1,10 +1,10 @@
 '''
-File: default_backend.py
+File: user.py
 Project: token-credit-backend
 File Created: Wednesday, 29th January 2020 10:05:45 am
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Thursday, 29th October 2020 10:56:17 am
+Last Modified: Monday, 2nd November 2020 9:37:17 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -75,6 +75,10 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email: str, password: str, **extra_fields):
+
+        if not password:
+            raise ValueError("Password is required")
+
         user = self.create_user(email, password, **extra_fields)
         # This is a must
         user.is_superuser = True

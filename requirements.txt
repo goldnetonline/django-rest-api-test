@@ -15,5 +15,6 @@ mysqlclient==2.0.*
 django-guardian==2.3.*
 rules==2.2.*
 flake8==3.8.*
+bcrypt==3.2.*
 
 
