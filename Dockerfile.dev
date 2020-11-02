@@ -1,5 +1,8 @@
 FROM python:3.7
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     default-mysql-client \
@@ -23,7 +26,11 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 80
-EXPOSE 443
+RUN useradd appuser && chown -R appuser /var/www/html
+USER appuser
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
+
+EXPOSE 2000
+# EXPOSE 443
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:2000"]

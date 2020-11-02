@@ -1,10 +1,10 @@
 '''
-File: private_backend.py
+File: paystack.py
 Project: token-credit-backend
 File Created: Thursday, 25th June 2020 4:41:10 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Thursday, 29th October 2020 12:18:39 pm
+Last Modified: Monday, 2nd November 2020 2:07:34 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -152,8 +152,8 @@ class Paystack:
         Args:
             amount (float): The proposed transaction amount =
             percentage (float, optional): The paystack rate. Defaults to 1.5.
-            is_local_txn (bool, optional): If the transaction is a local transaction. Defaults to True.
-            waived_100 (bool, optional): if the 100 naora transaction charge is waived. Defaults to False.
+            is_local_txn (bool, optional): If the txn is a local transaction. Defaults to True.
+            waived_100 (bool, optional): if the N100 txn charge is waived. Defaults to False.
 
         Returns:
             float: [description]
@@ -162,7 +162,7 @@ class Paystack:
         if amount <= cls.PAYSTACK_WAIVER_100_MAX and is_local_txn:
             waived_100 = True
 
-        charge = amount * (percentage/100)
+        charge = amount * (percentage / 100)
 
         if not waived_100:
             charge += cls.PAYSTACK_PROCESSING_FEE

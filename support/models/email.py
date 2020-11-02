@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Thursday, 27th February 2020 7:03:50 am
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Tuesday, 27th October 2020 12:48:36 pm
+Last Modified: Monday, 2nd November 2020 2:11:09 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -19,7 +19,8 @@ class EmailTemplate(TouchDatesMixim, SlugifyMixim):
     name = models.CharField(max_length=191)
     subject = models.CharField(max_length=191)
     message = models.TextField(
-        help_text='Please do not put a beginning salutation like dear ..., or closing greetings like regards as this will be taken care of. \n<br />\
+        help_text='Please do not put a beginning salutation like dear ..., \
+            or closing greetings like regards as this will be taken care of. \n<br />\
             However, you can use the following anywhere to reference values: <br />\n\
             {{ applicant_name }} : Add appplicant name  <br />\n  \
             {{ institution }} : The institution applied for if any   \
@@ -38,7 +39,8 @@ class EmailTemplate(TouchDatesMixim, SlugifyMixim):
         """Get an email template from setting
 
         Args:
-            email (str, optional): The email template identifier string. Defaults to 'pending_email'.
+            email (str, optional): The email template identifier string. \
+                Defaults to 'pending_email'.
 
         Returns:
             EmailTemplate: Email template object

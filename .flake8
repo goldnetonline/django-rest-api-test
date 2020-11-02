@@ -1,0 +1,11 @@
+[flake8]
+ignore = F401
+max-line-length = 100
+exclude =
+    **/migrations/,
+    **/tests/,
+    **/tests.py,
+    **/__pycache__,
+    database_models,
+    **/manage.py,
+    **/settings.py,

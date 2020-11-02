@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Sunday, 26th January 2020 12:34:13 am
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Thursday, 29th October 2020 2:49:29 pm
+Last Modified: Monday, 2nd November 2020 2:09:40 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -146,7 +146,8 @@ def failJson(message: str = None, data: object = None, * args, **kwargs):
     return json(response, *args, **kwargs)
 
 
-def renderOrFail(template: str, request: HttpRequest, context: object = {}, *args, **kwargs) -> HttpResponse:
+def renderOrFail(template: str, request: HttpRequest,
+                 context: object = {}, *args, **kwargs) -> HttpResponse:
     """
     Render a django template if it exist or return to 404 page
 

@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Tuesday, 4th February 2020 3:16:04 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Thursday, 29th October 2020 5:51:49 pm
+Last Modified: Monday, 2nd November 2020 2:10:15 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -40,7 +40,8 @@ def serialize(comp_obj: object, extract_key: bool = False):
 
     Args:
         comp_obj ([object]): Complex object
-        extract_key (bool, optional): If to extract the key only if it is a model. Defaults to False.
+        extract_key (bool, optional): If to extract the key only if it is a model. \
+            Defaults to False.
     """
     def convert(value):
         from decimal import Decimal
@@ -184,7 +185,8 @@ def html2PlainText(html: str) -> str:
     return strip_tags(html)
 
 
-def sendMail(template: str, subject: str, to: object, context: object = None, sender: str = None, **kwargs) -> bool:
+def sendMail(template: str, subject: str, to: object,
+             context: object = None, sender: str = None, **kwargs) -> bool:
     """
     A wrapper for send_mail
     Compile a template to html and string and send email

@@ -19,16 +19,17 @@ COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
 
-# This should come before the requirement install
-RUN pip install mysqlclient
-
 COPY gunicorn.service /etc/systemd/system/gunicorn.service
 
 COPY nginx.conf /etc/nginx/sites-enabled/tokencredit
 
-
-
 COPY . .
+
+# RUN useradd appuser && chown -R appuser /var/www/html
+# USER appuser
+
+
+# EXPOSE 2000
 
 EXPOSE 80
 EXPOSE 443

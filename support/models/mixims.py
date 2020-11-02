@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Tuesday, 11th February 2020 1:14:33 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Sunday, 25th October 2020 6:22:57 pm
+Last Modified: Monday, 2nd November 2020 2:09:03 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -43,12 +43,13 @@ class SlugifyMixim(models.Model):
         abstract = True
 
     def doSlug(self):
-        if (hasattr(self, 'slug') and not self.slug) and (hasattr(self, 'name') or hasattr(self, 'title')):
+        if (hasattr(self, 'slug') and not self.slug) and \
+                (hasattr(self, 'name') or hasattr(self, 'title')):
             toSlug = self.name if hasattr(self, 'name') else self.title
             self.slug = slugify(toSlug)
             self.save()
 
-    def save(self,  *args, **kwargs):
+    def save(self, *args, **kwargs):
         self.doSlug()
         super().save(*args, **kwargs)
 

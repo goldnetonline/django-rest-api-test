@@ -4,29 +4,32 @@ Project: token-credit-backend
 File Created: Tuesday, 27th October 2020 11:40:05 am
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Thursday, 29th October 2020 1:13:01 pm
+Last Modified: Monday, 2nd November 2020 1:54:39 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
 '''
 
-from logging import getLogger
-from .helper import config
 from typing import (
     Any
 )
+from logging import getLogger
+from .helper import config
 
-idenfifier = config('APP_IDENTIFIER', 'token_credit')
+IDENTIFIER = config('APP_IDENTIFIER', 'token_credit')
 
 
 class Logger:
+    """
+    System Logging factory
+    """
 
     name = None
 
     def __init__(self) -> None:
-        self.name = idenfifier
+        self.name = IDENTIFIER
 
-    def emit_logger(self, msg: Any, name: str = None, * args, **kwargs) -> None:
+    def emit_logger(self, msg: Any, name: str = None, *args, **kwargs) -> None:
 
         level = self.name if not name else f"{self.name}.{name}"
         getattr(getLogger(level), name if name else 'info')(
@@ -54,5 +57,5 @@ class Logger:
 logger = Logger()
 
 __all__ = [
-    logger
+    "logger"
 ]
