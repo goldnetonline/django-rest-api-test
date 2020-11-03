@@ -3,12 +3,9 @@ FROM python:3.7
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     default-mysql-client \
-    git \
-    zip \
-    curl \
-    sudo \
-    nano \
     cron \
+    curl \
+    zip \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip

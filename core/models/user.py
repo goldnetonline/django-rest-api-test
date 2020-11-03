@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Wednesday, 29th January 2020 10:05:45 am
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Monday, 2nd November 2020 9:37:17 am
+Last Modified: Monday, 2nd November 2020 12:52:03 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -33,9 +33,9 @@ class UserMaritalStatus(Enum):
     WIDOW = 'widow'
 
 
-genders: list = [(g.value, g.value.title()) for g in UserGender]
+GENDERS: list = [(g.value, g.value.title()) for g in UserGender]
 
-marital_statuses: list = [(m.value, m.value.title())
+MARITAL_STATUSES: list = [(m.value, m.value.title())
                           for m in UserMaritalStatus]
 
 
@@ -105,10 +105,10 @@ class User(AbstractUser, TouchDatesMixim):
     phone = models.CharField(max_length=191, null=True, blank=True)
 
     gender = models.CharField(
-        choices=genders, max_length=20, blank=True, null=True)
+        choices=GENDERS, max_length=20, blank=True, null=True)
 
     marital_status = models.CharField(
-        choices=marital_statuses, max_length=20, blank=True, null=True)
+        choices=MARITAL_STATUSES, max_length=20, blank=True, null=True)
 
     birthday = models.DateField(blank=True, null=True)
 

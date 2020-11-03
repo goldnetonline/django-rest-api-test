@@ -58,11 +58,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
 
-    'core',
-    'support',
-    'api',
-    'loan',
-
+    # Core
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,8 +67,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
+    # Externals apps
     'rest_framework',
     'storages',
+
+    # Internal apps
+    'core',
+    'support',
+    'api',
+    'loan',
 ]
 
 if APP_ENV == 'local':
@@ -369,5 +372,9 @@ PAYSTACK_API_ENDPOINT = 'https://api.paystack.co'
 
 
 # For django rest framework
-
 USE_DJANGO_REST_FRAMEWORK = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
