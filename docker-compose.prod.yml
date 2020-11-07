@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+    web:
+        build:
+            context: '.'
+            dockerfile: Dockerfile
+            # args:
+            #     uid: ${UID}
+        container_name: tokencredit
+
+        volumes:
+            - '${EB_LOG_BASE_DIR}/web:/var/www/html/storage/logs'
+
+        ports:
+            - 80:80
