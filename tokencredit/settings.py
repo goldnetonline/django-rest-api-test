@@ -206,6 +206,7 @@ USE_TZ = True
 # STATIC_URL = '/static/'
 
 use_aws = env('USE_AWS', default=True)
+STATIC_URL = '/public/'
 
 # else use default setting
 if use_aws:
