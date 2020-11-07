@@ -13,6 +13,7 @@ RUN apt-get update \
     nginx \
     sudo \
     zip \
+    netcat \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip

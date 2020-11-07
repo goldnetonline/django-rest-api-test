@@ -11,6 +11,7 @@ RUN apt-get update \
     default-mysql-client \
     curl \
     zip \
+    netcat \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
