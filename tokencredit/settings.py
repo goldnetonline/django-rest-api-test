@@ -113,7 +113,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tokencredit.wsgi.application'
 
-MAINTENANCE_MODE = env('MAINTENANCE_MODE')
+MAINTENANCE_MODE = env('MAINTENANCE_MODE', default=False)
 
 BACKEND_PATH = 'backoffice'
 
@@ -145,6 +145,7 @@ if env('CACHE_DRIVER', default=None) == 'redis':
             "KEY_PREFIX": APP_IDENTIFIER
         }
     }
+    # else use default
 
 # Session
 session_driver = env(
@@ -203,72 +204,77 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 # STATIC_URL = '/static/'
-AWS_DEFAULT_REGION = env('AWS_DEFAULT_REGION')
 
-if APP_ENV == 'local':
-    # FOR MAILS AND OTHERS
-    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+use_aws = env('USE_AWS', default=True)
 
-    MINIO_STORAGE_ACCESS_KEY = env('AWS_ACCESS_KEY_ID')
-    MINIO_STORAGE_SECRET_KEY = env('AWS_SECRET_ACCESS_KEY')
-    MINIO_STORAGE_MEDIA_BUCKET_NAME = env('AWS_BUCKET')
-    MINIO_STORAGE_STATIC_BUCKET_NAME = env('AWS_BUCKET')
+# else use default setting
+if use_aws:
+    AWS_DEFAULT_REGION = env('AWS_DEFAULT_REGION')
 
-    MINIO_STORAGE_ENDPOINT = env('MINIO_URL', default='')
-    MINIO_STORAGE_REGION_NAME = env('AWS_DEFAULT_REGION')
-    MINIO_STORAGE_LOCATION = ''
+    if APP_ENV == 'local':
+        # FOR MAILS AND OTHERS
+        AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
-    AWS_DEFAULT_ACL = None
+        MINIO_STORAGE_ACCESS_KEY = env('AWS_ACCESS_KEY_ID')
+        MINIO_STORAGE_SECRET_KEY = env('AWS_SECRET_ACCESS_KEY')
+        MINIO_STORAGE_MEDIA_BUCKET_NAME = env('AWS_BUCKET')
+        MINIO_STORAGE_STATIC_BUCKET_NAME = env('AWS_BUCKET')
 
-    MINIO_STORAGE_STATIC_URL = env(
-        'AWS_URL') + "/" + MINIO_STORAGE_LOCATION + '/'
-    MINIO_STORAGE_MEDIA_URL = env(
-        'AWS_URL') + "/"
+        MINIO_STORAGE_ENDPOINT = env('MINIO_URL', default='')
+        MINIO_STORAGE_REGION_NAME = env('AWS_DEFAULT_REGION')
+        MINIO_STORAGE_LOCATION = ''
 
-    MINIO_STORAGE_USE_HTTPS = True
+        AWS_DEFAULT_ACL = None
 
-    # STATICFILES_STORAGE = 'minio_storage.storage.MinioStaticStorage'
-    DEFAULT_FILE_STORAGE = 'minio_storage.storage.MinioMediaStorage'
-    STATIC_URL = '/public/'
-    STATIC_ROOT = 'staticfiles'
+        MINIO_STORAGE_STATIC_URL = env(
+            'AWS_URL') + "/" + MINIO_STORAGE_LOCATION + '/'
+        MINIO_STORAGE_MEDIA_URL = env(
+            'AWS_URL') + "/"
 
-else:
-    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = env('AWS_BUCKET')
-    AWS_QUERYSTRING_AUTH = False
+        MINIO_STORAGE_USE_HTTPS = True
 
-    AWS_S3_ENDPOINT_URL = env('AWS_URL')
-    AWS_S3_REGION_NAME = env('AWS_DEFAULT_REGION')
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
-    AWS_LOCATION = ''
+        # STATICFILES_STORAGE = 'minio_storage.storage.MinioStaticStorage'
+        DEFAULT_FILE_STORAGE = 'minio_storage.storage.MinioMediaStorage'
+        STATIC_URL = '/public/'
+        STATIC_ROOT = 'staticfiles'
 
-    AWS_DEFAULT_ACL = None
+    else:
+        AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+        AWS_STORAGE_BUCKET_NAME = env('AWS_BUCKET')
+        AWS_QUERYSTRING_AUTH = False
 
-    STATIC_URL = env('AWS_URL') + AWS_LOCATION + '/'
-    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+        AWS_S3_ENDPOINT_URL = env('AWS_URL')
+        AWS_S3_REGION_NAME = env('AWS_DEFAULT_REGION')
+        AWS_S3_OBJECT_PARAMETERS = {
+            'CacheControl': 'max-age=86400',
+        }
+        AWS_LOCATION = ''
 
-    AWS_PRIVATE_BUCKET = env('AWS_PRIVATE_BUCKET', default=None)
-    AWS_PRIVATE_BUCKET_URL = env('AWS_PRIVATE_BUCKET_URL', default=None)
+        AWS_DEFAULT_ACL = None
 
-    STATIC_URL = '/public/'
-    STATIC_ROOT = 'staticfiles'
+        STATIC_URL = env('AWS_URL') + AWS_LOCATION + '/'
+        # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+        DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+        AWS_PRIVATE_BUCKET = env('AWS_PRIVATE_BUCKET', default=None)
+        AWS_PRIVATE_BUCKET_URL = env('AWS_PRIVATE_BUCKET_URL', default=None)
+
+        STATIC_URL = '/public/'
+        STATIC_ROOT = 'staticfiles'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'public'),
 ]
 
 # Email
-EMAIL_BACKEND = env('MAIL_DRIVER')
-EMAIL_HOST = env('MAIL_HOST')
-EMAIL_PORT = env('MAIL_PORT')
+EMAIL_BACKEND = env('MAIL_DRIVER', default=None)
+EMAIL_HOST = env('MAIL_HOST', default=None)
+EMAIL_PORT = env('MAIL_PORT', default=None)
 EMAIL_HOST_USER = env('MAIL_USERNAME', default=False)
 EMAIL_HOST_PASSWORD = env('MAIL_PASSWORD', default=False)
-EMAIL_USE_TLS = env('MAIL_ENCRYPTION', False)
+EMAIL_USE_TLS = env('MAIL_ENCRYPTION', default=False)
 DEFAULT_FROM_EMAIL = 'tokencredit <noreply@tokencredit.com.ng>'
 SERVER_EMAIL = 'noreply@tokencredit.com.ng'
 ADMINS = [
@@ -361,8 +367,8 @@ LOGGING = {
 }
 
 # Paystack stuffs
-PAYSTACK_PUBLIC_KEY = env('PAYSTACK_PUBLIC_KEY')
-PAYSTACK_SECRET_KEY = env('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = env('PAYSTACK_PUBLIC_KEY', default=None)
+PAYSTACK_SECRET_KEY = env('PAYSTACK_SECRET_KEY', default=None)
 PAYSTACK_WEBHOOK_IPS = [
     '52.31.139.75',
     '52.49.173.169',

@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+
+    db:
+        image: mariadb
+        environment:
+          - MYSQL_ROOT_PASSWORD=password
+          - MYSQL_USER=user
+          - MYSQL_PASSWORD=secret
+
+        expose:
+          - "3306"
+
+    web:
+        build:
+            - context: .
+            - dockerfile: Dockerfile.ci
+        container_name: tokencredit
+        environment:
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_DATABASE=tokencredit
+            - DB_USERNAME=user
+            - DB_PASSWORD=secret
+            - USE_AWS=False
+
+            depends_on:
+              - db
