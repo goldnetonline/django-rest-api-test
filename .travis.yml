@@ -14,4 +14,4 @@ before_script:
 script:
     # Run the test in parallel with level 2 verbosity
     # Also run python with deprecated message 
-    - docker-compose run web sh -c "./wait-on-db && python -Wa manage.py test --parallel -v 2"
+    - docker exec tokencredit_ci bash -c "./wait-on-db && python -Wa manage.py test --parallel -v 2"
