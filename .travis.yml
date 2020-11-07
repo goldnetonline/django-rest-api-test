@@ -19,7 +19,11 @@ script:
     # Also run python with deprecated message 
     - docker-compose run web sh -c "./wait-on-db && python -Wa manage.py test --parallel -v 2"
 
+before_deploy:
+    - rm docker-compose.yml
+
 deploy:
+    skip_cleanup: true
     provider: elasticbeanstalk
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
