@@ -19,7 +19,7 @@ script:
     # Also run python with deprecated message 
     - docker-compose run web sh -c "./wait-on-db && python -Wa manage.py test --parallel -v 2"
 
-before_deploy:
+after_script:
     - rm docker-compose.yml
 
 deploy:
