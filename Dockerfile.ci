@@ -27,3 +27,5 @@ COPY . .
 
 # Check if it copied correctly
 # RUN tail ./tokencredit/.env
+
+ENTRYPOINT [ "./wait-on-db" ]
