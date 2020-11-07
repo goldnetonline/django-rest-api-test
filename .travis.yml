@@ -14,4 +14,4 @@ before_script:
 script:
     # Run the test in parallel with level 2 verbosity
     # Also run python with deprecated message 
-    - ./wait-on-db && docker-compose run web sh -c "python -Wa manage.py test --parallel -v 2"
+    - docker-compose run web sh -c "python -Wa manage.py test --parallel -v 2"
