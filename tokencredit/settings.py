@@ -207,6 +207,7 @@ USE_TZ = True
 
 use_aws = env('USE_AWS', default=True)
 STATIC_URL = '/public/'
+STATIC_ROOT = 'staticfiles'
 
 # else use default setting
 if use_aws:
@@ -237,8 +238,6 @@ if use_aws:
 
         # STATICFILES_STORAGE = 'minio_storage.storage.MinioStaticStorage'
         DEFAULT_FILE_STORAGE = 'minio_storage.storage.MinioMediaStorage'
-        STATIC_URL = '/public/'
-        STATIC_ROOT = 'staticfiles'
 
     else:
         AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
@@ -261,9 +260,6 @@ if use_aws:
 
         AWS_PRIVATE_BUCKET = env('AWS_PRIVATE_BUCKET', default=None)
         AWS_PRIVATE_BUCKET_URL = env('AWS_PRIVATE_BUCKET_URL', default=None)
-
-        STATIC_URL = '/public/'
-        STATIC_ROOT = 'staticfiles'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'public'),
