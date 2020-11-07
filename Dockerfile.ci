@@ -16,3 +16,5 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY . .
+
+RUN echo -e "DB_HOST=$DB_HOST\nDB_DATABASE=$DB_DATABASE\nDB_USERNAME=$DB_USERNAME\nDB_PASSWORD=$DB_PASSWORD\nUSE_AWS=False" >> ./tokencredit/.env
