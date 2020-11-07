@@ -2,7 +2,6 @@ version: '3.7'
 services:
     db:
         image: mariadb
-        container_name: tokencredit_ci_db
         environment:
             - MYSQL_ROOT_PASSWORD=password
             - MYSQL_USER=user
