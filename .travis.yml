@@ -10,6 +10,7 @@ before_script:
     - pip install docker-compose
     - rm docker-compose.yml
     - mv docker-compose.ci.yml docker-compose.yml
+    - touch tokencredit/.env
     # Build the image before running test
     - docker-compose up --build -d
 
