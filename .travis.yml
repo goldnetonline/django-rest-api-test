@@ -11,7 +11,7 @@ before_script:
     # Build the image before running test
     - docker-compose -f docker-compose.ci.yml up --build -d
 
-scripts:
+script:
     # Run the test in parallel with level 2 verbosity
     # Also run python with deprecated message 
     - docker-compose run web sh -c "python -Wa manage.py test --parallel -v 2"
