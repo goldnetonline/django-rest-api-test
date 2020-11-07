@@ -2,6 +2,7 @@ version: '3.7'
 services:
     db:
         image: mariadb
+        container_name: tokencredit_ci_db
         environment:
             - MYSQL_ROOT_PASSWORD=password
             - MYSQL_USER=user
@@ -15,7 +16,7 @@ services:
             context: '.'
             dockerfile: Dockerfile.ci
 
-        container_name: tokencredit
+        container_name: tokencredit_ci
         environment:
             - DB_HOST=db
             - DB_PORT=3306
