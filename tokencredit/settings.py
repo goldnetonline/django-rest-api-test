@@ -50,7 +50,8 @@ ALLOWED_HOSTS = [
     'localhost',
     'tokencredit.my',
     '127.0.0.1',
-    '::1'
+    '::1',
+    'token-credit-external.us-west-2.elasticbeanstalk.com'
 ]
 
 

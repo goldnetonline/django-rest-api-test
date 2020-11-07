@@ -29,4 +29,4 @@ EXPOSE 443
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
 # CMD ["/bin/bash", "server.sh"]
 
-CMD ["gunicorn", "tokencredit.wsgi:application", "-b :80", "--forwarded-allow-ips=\"*\"", "-w 3"]
+CMD ["python", "manage.py", "migrate", ";", "gunicorn", "tokencredit.wsgi:application", "-b :80", "--forwarded-allow-ips=\"*\"", "-w 3"]
