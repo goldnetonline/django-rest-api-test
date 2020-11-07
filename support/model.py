@@ -1,13 +1,13 @@
 '''
-File: model.py
-Project: edutours.com.ng
+File: user.py
+Project: token-credit-backend
 File Created: Tuesday, 25th February 2020 7:17:35 pm
-Author: Temitayo Bodunrin (temitayo@brandnaware.com)
+Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Tuesday, 25th February 2020 7:21:52 pm
-Modified By: Temitayo Bodunrin (temitayo@brandnaware.com)
+Last Modified: Wednesday, 28th October 2020 1:01:01 pm
+Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Copyright 2020, Brandnaware Nigeria
+Copyright 2020, CamelCase Technologies Ltd
 '''
 
 from django.db.models import Model

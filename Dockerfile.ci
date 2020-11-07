@@ -1,0 +1,32 @@
+FROM python:3.7
+
+ENV DB_HOST=$DB_HOST
+ENV DB_DATABASE=$DB_DATABASE
+ENV DB_USERNAME=$DB_USERNAME
+ENV DB_PASSWORD=$DB_PASSWORD
+ENV USE_AWS=False
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    default-mysql-client \
+    curl \
+    zip \
+    netcat \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip
+
+WORKDIR /var/www/html/
+
+COPY requirements.txt ./
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+# RUN echo -e "DB_HOST=$DB_HOST\nDB_DATABASE=$DB_DATABASE\nDB_USERNAME=$DB_USERNAME\nDB_PASSWORD=$DB_PASSWORD\nUSE_AWS=False" >> ./tokencredit/.env
+
+# Check if it copied correctly
+# RUN tail ./tokencredit/.env
+
+# ENTRYPOINT [ "./wait-on-db" ]

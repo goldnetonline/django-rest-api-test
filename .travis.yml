@@ -1,0 +1,20 @@
+language: python
+python:
+    - 3.7
+
+services:
+    - docker
+
+before_script:
+    # Install docker compose
+    - pip install docker-compose
+    - rm docker-compose.yml
+    - mv docker-compose.ci.yml docker-compose.yml
+    - touch tokencredit/.env
+    # Build the image before running test
+    - docker-compose up --build -d
+
+script:
+    # Run the test in parallel with level 2 verbosity
+    # Also run python with deprecated message 
+    - docker-compose run web sh -c "./wait-on-db && python -Wa manage.py test --parallel -v 2"

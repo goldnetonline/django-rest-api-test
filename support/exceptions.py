@@ -1,10 +1,10 @@
 '''
-File: exceptions.py
-Project: edutours.com.ng
+File: user.py
+Project: token-credit-backend
 File Created: Friday, 26th June 2020 2:03:52 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Friday, 26th June 2020 2:38:42 pm
+Last Modified: Wednesday, 28th October 2020 1:01:01 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd

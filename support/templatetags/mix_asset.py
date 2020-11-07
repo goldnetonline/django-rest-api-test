@@ -1,10 +1,10 @@
 '''
-File: mix_asset.py
-Project: edutours.com.ng
+File: user.py
+Project: token-credit-backend
 File Created: Monday, 22nd June 2020 5:45:33 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Monday, 22nd June 2020 6:26:26 pm
+Last Modified: Wednesday, 28th October 2020 1:01:01 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd

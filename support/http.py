@@ -4,7 +4,7 @@ Project: token-credit-backend
 File Created: Sunday, 26th January 2020 12:34:13 am
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Monday, 26th October 2020 11:24:52 am
+Last Modified: Monday, 2nd November 2020 2:09:40 am
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd
@@ -15,10 +15,14 @@ from PIL import Image
 from tempfile import gettempdir
 from urllib.request import urlretrieve
 from django.http import HttpResponse, HttpRequest, JsonResponse, Http404, HttpResponseRedirect
+from rest_framework.response import Response as RestResponse
+from rest_framework import status
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
 from django.urls import reverse, reverse_lazy
-from .helper import randomStringDigits, serialize
+from .helper import randomStringDigits, serialize, config
+
+use_rest = config('USE_DJANGO_REST_FRAMEWORK', False)
 
 
 def response(content=None):
@@ -27,9 +31,8 @@ def response(content=None):
 
     :param str content: The Response, most likely string
     '''
-    if content:
-        return HttpResponse(content)
-    return HttpResponse()
+
+    return RestResponse(content) if use_rest else HttpResponse(content)
 
 
 def redirect(to: str, *args, **kwargs):
@@ -74,8 +77,8 @@ def json(data: object, raw=False, *args, **kwargs):
         for (key, value) in kwargs.get('additionalFields').items():
             data[key] = value
 
-    safe = True if hasattr(kwargs, 'safe') and kwargs.safe else False
-    kwargs['safe'] = safe
+    if not use_rest:
+        kwargs.setdefault('safe', False)
 
     # Delete kwargs message, data, additionalFields
     try:
@@ -96,10 +99,12 @@ def json(data: object, raw=False, *args, **kwargs):
 
     data = serialize(data, extract_key) if not raw else data
 
+    if use_rest:
+        return RestResponse(data, *args, **kwargs)
     return JsonResponse(data, *args, **kwargs)
 
 
-def successJson(data: object = {}, *args, **kwargs):
+def successJson(data: object = None, message: str = None, *args, **kwargs):
     """Send Json API success
 
     Keyword Arguments:
@@ -110,7 +115,7 @@ def successJson(data: object = {}, *args, **kwargs):
     """
     response = {
         'success': True,
-        'message': kwargs.get('message') or 'Success'
+        'message': message or 'Success'
     }
 
     if data:
@@ -119,7 +124,7 @@ def successJson(data: object = {}, *args, **kwargs):
     return json(response, *args, **kwargs)
 
 
-def failJson(data: object = {}, *args, **kwargs):
+def failJson(message: str = None, data: object = None, * args, **kwargs):
     """Send Json API Failure
 
     Keyword Arguments:
@@ -130,16 +135,19 @@ def failJson(data: object = {}, *args, **kwargs):
     """
     response = {
         'success': False,
-        'message': kwargs.get('message') or 'Error',
+        'message': message or 'Error',
     }
 
     if data:
         response['data'] = data
 
-    return json(response, status=400, *args, **kwargs)
+    kwargs.setdefault('status', status.HTTP_400_BAD_REQUEST)
+
+    return json(response, *args, **kwargs)
 
 
-def renderOrFail(template: str, request: HttpRequest, context: object = {}, *args, **kwargs) -> HttpResponse:
+def renderOrFail(template: str, request: HttpRequest,
+                 context: object = {}, *args, **kwargs) -> HttpResponse:
     """
     Render a django template if it exist or return to 404 page
 

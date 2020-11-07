@@ -1,10 +1,10 @@
 '''
-File: s3_private.py
-Project: edutours.com.ng
+File: user.py
+Project: token-credit-backend
 File Created: Thursday, 20th February 2020 2:18:32 pm
 Author: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
-Last Modified: Friday, 8th May 2020 8:07:16 pm
+Last Modified: Wednesday, 28th October 2020 1:01:02 pm
 Modified By: Temitayo Bodunrin (temitayo@camelcase.co)
 -----
 Copyright 2020, CamelCase Technologies Ltd

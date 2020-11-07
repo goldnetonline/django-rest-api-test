@@ -42,6 +42,7 @@ APP_ENV = env('APP_ENV', default='production')
 
 # Application name
 APP_NAME = env('APP_NAME', default='Token Credit')
+APP_IDENTIFIER = APP_NAME.lower().replace(" ", "_")
 
 SITE_URL = env('SITE_URL', default="https://tokencredit.com/")
 
@@ -56,17 +57,25 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'support.apps.SupportConfig',
+
+    # Core
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'django.contrib.humanize',
+
+    # Externals apps
     'rest_framework',
     'storages',
+
+    # Internal apps
+    'core',
+    'support',
+    'api',
+    'loan',
 ]
 
 if APP_ENV == 'local':
@@ -88,7 +97,7 @@ ROOT_URLCONF = 'tokencredit.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,6 +105,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'tokencredit.root_context.root_context'
             ],
         },
     },
@@ -103,7 +113,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tokencredit.wsgi.application'
 
-MAINTENANCE_MODE = env('MAINTENANCE_MODE')
+MAINTENANCE_MODE = env('MAINTENANCE_MODE', default=False)
 
 BACKEND_PATH = 'backoffice'
 
@@ -123,23 +133,28 @@ DATABASES = {
 }
 
 # CACHE
-if env('CACHE_DRIVER', default=None) == 'django_redis.cache.RedisCache':
+if env('CACHE_DRIVER', default=None) == 'redis':
     CACHES = {
         "default": {
-            "BACKEND": env('CACHE_DRIVER'),
+            "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": env('REDIS_HOST'),
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 # "PASSWORD": env('REDIS_PASSWORD', None)
             },
-            "KEY_PREFIX": APP_NAME
+            "KEY_PREFIX": APP_IDENTIFIER
         }
     }
+    # else use default
 
 # Session
-SESSION_ENGINE = env(
-    'SESSION_DRIVER', default='django.contrib.sessions.backends.db')
+session_driver = env(
+    'SESSION_DRIVER',
+    default='django.contrib.sessions.backends.db'
+)
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cache" if session_driver == "cache" else session_driver
+SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -158,6 +173,17 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+]
+
+
+AUTH_USER_MODEL = 'core.User'
 
 
 # Internationalization
@@ -178,70 +204,78 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 # STATIC_URL = '/static/'
-AWS_DEFAULT_REGION = env('AWS_DEFAULT_REGION')
 
-if APP_ENV == 'local':
-    # FOR MAILS AND OTHERS
-    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+use_aws = env('USE_AWS', default=True)
+STATIC_URL = '/public/'
 
-    MINIO_STORAGE_ACCESS_KEY = env('AWS_ACCESS_KEY_ID')
-    MINIO_STORAGE_SECRET_KEY = env('AWS_SECRET_ACCESS_KEY')
-    MINIO_STORAGE_MEDIA_BUCKET_NAME = env('AWS_BUCKET')
-    MINIO_STORAGE_STATIC_BUCKET_NAME = env('AWS_BUCKET')
+# else use default setting
+if use_aws:
+    AWS_DEFAULT_REGION = env('AWS_DEFAULT_REGION')
 
-    MINIO_STORAGE_ENDPOINT = env('MINIO_URL', default='')
-    MINIO_STORAGE_REGION_NAME = env('AWS_DEFAULT_REGION')
-    MINIO_STORAGE_LOCATION = ''
+    if APP_ENV == 'local':
+        # FOR MAILS AND OTHERS
+        AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
-    AWS_DEFAULT_ACL = None
+        MINIO_STORAGE_ACCESS_KEY = env('AWS_ACCESS_KEY_ID')
+        MINIO_STORAGE_SECRET_KEY = env('AWS_SECRET_ACCESS_KEY')
+        MINIO_STORAGE_MEDIA_BUCKET_NAME = env('AWS_BUCKET')
+        MINIO_STORAGE_STATIC_BUCKET_NAME = env('AWS_BUCKET')
 
-    MINIO_STORAGE_STATIC_URL = env(
-        'AWS_URL') + "/" + MINIO_STORAGE_LOCATION + '/'
-    MINIO_STORAGE_MEDIA_URL = env(
-        'AWS_URL') + "/"
-    MINIO_STORAGE_USE_HTTPS = False
-    # STATICFILES_STORAGE = 'minio_storage.storage.MinioStaticStorage'
-    DEFAULT_FILE_STORAGE = 'minio_storage.storage.MinioMediaStorage'
-    STATIC_URL = '/public/'
-    STATIC_ROOT = 'staticfiles'
+        MINIO_STORAGE_ENDPOINT = env('MINIO_URL', default='')
+        MINIO_STORAGE_REGION_NAME = env('AWS_DEFAULT_REGION')
+        MINIO_STORAGE_LOCATION = ''
 
-else:
-    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = env('AWS_BUCKET')
-    AWS_QUERYSTRING_AUTH = False
+        AWS_DEFAULT_ACL = None
 
-    AWS_S3_ENDPOINT_URL = env('AWS_URL')
-    AWS_S3_REGION_NAME = env('AWS_DEFAULT_REGION')
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
-    AWS_LOCATION = ''
+        MINIO_STORAGE_STATIC_URL = env(
+            'AWS_URL') + "/" + MINIO_STORAGE_LOCATION + '/'
+        MINIO_STORAGE_MEDIA_URL = env(
+            'AWS_URL') + "/"
 
-    AWS_DEFAULT_ACL = None
+        MINIO_STORAGE_USE_HTTPS = True
 
-    STATIC_URL = env('AWS_URL') + AWS_LOCATION + '/'
-    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+        # STATICFILES_STORAGE = 'minio_storage.storage.MinioStaticStorage'
+        DEFAULT_FILE_STORAGE = 'minio_storage.storage.MinioMediaStorage'
+        STATIC_URL = '/public/'
+        STATIC_ROOT = 'staticfiles'
 
-    AWS_PRIVATE_BUCKET = env('AWS_PRIVATE_BUCKET', default=None)
-    AWS_PRIVATE_BUCKET_URL = env('AWS_PRIVATE_BUCKET_URL', default=None)
+    else:
+        AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+        AWS_STORAGE_BUCKET_NAME = env('AWS_BUCKET')
+        AWS_QUERYSTRING_AUTH = False
 
-    STATIC_URL = '/public/'
-    STATIC_ROOT = 'staticfiles'
+        AWS_S3_ENDPOINT_URL = env('AWS_URL')
+        AWS_S3_REGION_NAME = env('AWS_DEFAULT_REGION')
+        AWS_S3_OBJECT_PARAMETERS = {
+            'CacheControl': 'max-age=86400',
+        }
+        AWS_LOCATION = ''
+
+        AWS_DEFAULT_ACL = None
+
+        STATIC_URL = env('AWS_URL') + AWS_LOCATION + '/'
+        # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+        DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+        AWS_PRIVATE_BUCKET = env('AWS_PRIVATE_BUCKET', default=None)
+        AWS_PRIVATE_BUCKET_URL = env('AWS_PRIVATE_BUCKET_URL', default=None)
+
+        STATIC_URL = '/public/'
+        STATIC_ROOT = 'staticfiles'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'public'),
 ]
 
 # Email
-EMAIL_BACKEND = env('MAIL_DRIVER')
-EMAIL_HOST = env('MAIL_HOST')
-EMAIL_PORT = env('MAIL_PORT')
+EMAIL_BACKEND = env('MAIL_DRIVER', default=None)
+EMAIL_HOST = env('MAIL_HOST', default=None)
+EMAIL_PORT = env('MAIL_PORT', default=None)
 EMAIL_HOST_USER = env('MAIL_USERNAME', default=False)
 EMAIL_HOST_PASSWORD = env('MAIL_PASSWORD', default=False)
-EMAIL_USE_TLS = env('MAIL_ENCRYPTION', False)
+EMAIL_USE_TLS = env('MAIL_ENCRYPTION', default=False)
 DEFAULT_FROM_EMAIL = 'tokencredit <noreply@tokencredit.com.ng>'
 SERVER_EMAIL = 'noreply@tokencredit.com.ng'
 ADMINS = [
@@ -260,37 +294,94 @@ CSRF_HEADER_NAME = "HTTP_X_CSRF_TOKEN"
 LOGIN_URL = '/auth/'
 
 
+info_handler = {
+    'handlers': ['file'],
+    'level': 'INFO',
+    'propagate': True,
+}
+
+
+error_handler = {
+    'handlers': ['file_error'],
+    'level': 'ERROR',
+    'propagate': True,
+}
+
+
+debug_handler = {
+    'handlers': ['file_debug'],
+    'level': 'INFO',
+    'propagate': True,
+}
+
+
+def get_file_logger(level: str, filename: str = None) -> dict:
+    return {
+        'level': level,
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': os.path.join(BASE_DIR, 'storage/logs/', (filename if filename else level.lower()) + '.log'),
+    }
+
+
 # Logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "{levelname} {asctime} {process:d} {message}",
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'filters': {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename':  os.path.join(BASE_DIR, 'storage/logs/application.log'),
-        },
+        'file': get_file_logger('INFO', 'application'),
+        'file_error': get_file_logger('ERROR'),
+        'file_debug': get_file_logger('DEBUG'),
+
+        # You can look at this to setup slack logs
+        # useful in the future
+        # Also look at how to write handlers and filters
+        # 'mail_admins': {
+        #     'level': 'ERROR',
+        #     'class': 'django.utils.log.AdminEmailHandler',
+        #     'filters': ['special']
+        # }
     },
+
     'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
+        'django': info_handler,
+        APP_IDENTIFIER: info_handler,
+        f"{APP_IDENTIFIER}.error": error_handler,
+        f"{APP_IDENTIFIER}.exception": error_handler,
+        f"{APP_IDENTIFIER}.debug": debug_handler,
     },
 }
 
 # Paystack stuffs
-PAYSTACK_PUBLIC_KEY = env('PAYSTACK_PUBLIC_KEY')
-PAYSTACK_SECRET_KEY = env('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = env('PAYSTACK_PUBLIC_KEY', default=None)
+PAYSTACK_SECRET_KEY = env('PAYSTACK_SECRET_KEY', default=None)
 PAYSTACK_WEBHOOK_IPS = [
     '52.31.139.75',
     '52.49.173.169',
     '52.214.14.220',
 ]
 PAYSTACK_API_ENDPOINT = 'https://api.paystack.co'
+
+
+# For django rest framework
+USE_DJANGO_REST_FRAMEWORK = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
